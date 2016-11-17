@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="jpress-web-core-1.0">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/config"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/language"/>
+        <dependent-module archiveName="jpress-utils-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jpress-utils/jpress-utils">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jpress-model-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jpress-model/jpress-model">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jpress-db-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jpress-db-api/jpress-db-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jpress-consts-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jpress-consts/jpress-consts">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jpress-message-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jpress-message/jpress-message">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="jpress-search-api-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jpress-search-api/jpress-search-api">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="jpress-web-core"/>
+        <property name="java-output-path" value="/jpress-web-core/target/classes"/>
+    </wb-module>
+</project-modules>
