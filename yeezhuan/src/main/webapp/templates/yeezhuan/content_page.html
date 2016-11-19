@@ -1,0 +1,14 @@
+<#include "_layout.html"/>
+<@layout>
+<div class="detail">
+	<div class="am-g am-container">
+		<article class="am-article">
+			<div class="am-article-hd detail-h2">
+				<h1 class="am-article-title">${content.title!}</h1>
+				<p class="am-article-meta">${content.created?string('yyyy-MM-dd')!}</p>
+			</div>
+			<div class="am-article-bd">${content.text!}</div>
+		</article>
+	</div>
+</div>
+</@layout>
