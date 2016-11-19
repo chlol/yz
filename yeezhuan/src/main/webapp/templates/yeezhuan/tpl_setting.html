@@ -10,7 +10,7 @@
 
 	<form action="${CPATH}/admin/option/save" method="POST" id="form" enctype="multipart/form-data">
 		<input type="hidden" name="ucode" value="${ucode}"> <input
-			type="hidden" name="autosave" value="jpblog_wechat_pay_enable,jpblog_wechat_pay_image,jpblog_banner_image,jpblog_banner_url,jpblog_wechat_pay_tips">
+			type="hidden" name="autosave" value="yeezhuan_wechat_pay_enable,yeezhuan_wechat_pay_image,yeezhuan_banner_image,yeezhuan_banner_url,yeezhuan_wechat_pay_tips">
 		<div class="row">
 		<div class="col-xs-12">
 			<h4 class="jp-set-title">奖赏设置</h4>
@@ -24,7 +24,7 @@
 						<div class="col-sm-6 jp-table-distance-top ">
 						<label>
 							<input class=" " type="checkbox"
-								name="jpblog_wechat_pay_enable" value="true" ${OPTION_CHECKED('jpblog_wechat_pay_enable')}>  <span class="jp-set-info"> 开启 </span></label>
+								name="yeezhuan_wechat_pay_enable" value="true" ${OPTION_CHECKED('yeezhuan_wechat_pay_enable')}>  <span class="jp-set-info"> 开启 </span></label>
 						</div>
 					</div>
 					<div class="clr"></div>
@@ -36,10 +36,10 @@
 					</div>
 					<div class="col-sm-9  jp-set-title-line">
 						<div class="col-sm-6 jp-table-distance-top ">
-							<img alt="" src="${CPATH}${OPTION('jpblog_wechat_pay_image')!}">
+							<img alt="" src="${CPATH}${OPTION('yeezhuan_wechat_pay_image')!}">
 							<br />
-							<input name="jpblog_wechat_pay_image" type="file">
-							<input class="form-control input-md" type="text" name="jpblog_wechat_pay_image" value="${OPTION('jpblog_wechat_pay_image')!}">
+							<input name="yeezhuan_wechat_pay_image" type="file">
+							<input class="form-control input-md" type="text" name="yeezhuan_wechat_pay_image" value="${OPTION('yeezhuan_wechat_pay_image')!}">
 						</div>
 					</div>
 					<div class="clr"></div>
@@ -49,7 +49,7 @@
 					<div class="col-sm-3  jp-set-info">打赏勾搭 ~~</div>
 					<div class="col-sm-9  jp-set-title-line">
 						<div class="col-sm-6 jp-table-distance-top ">
-							<input class="form-control input-md" type="text" placeholder="默认：打赏一个呗~~" name="jpblog_wechat_pay_tips" value="${OPTION('jpblog_wechat_pay_tips')!}">
+							<input class="form-control input-md" type="text" placeholder="默认：打赏一个呗~~" name="yeezhuan_wechat_pay_tips" value="${OPTION('yeezhuan_wechat_pay_tips')!}">
 						</div>
 					</div>
 					<div class="clr"></div>
@@ -68,10 +68,10 @@
 					</div>
 					<div class="col-sm-9  jp-set-title-line">
 						<div class="col-sm-6 jp-table-distance-top ">
-							<img alt="" src="${CPATH}${OPTION('jpblog_banner_image')!}">
+							<img alt="" src="${CPATH}${OPTION('yeezhuan_banner_image')!}">
 							<br />
-							<input name="jpblog_banner_image" type="file">
-							<input class="form-control input-md" type="text" name="jpblog_banner_image" value="${OPTION('jpblog_banner_image')!}">
+							<input name="yeezhuan_banner_image" type="file">
+							<input class="form-control input-md" type="text" name="yeezhuan_banner_image" value="${OPTION('yeezhuan_banner_image')!}">
 							
 						</div>
 					</div>
@@ -83,7 +83,7 @@
 					</div>
 					<div class="col-sm-9  jp-set-title-line">
 						<div class="col-sm-6 jp-table-distance-top ">
-							<input class="form-control input-md" type="text" name="jpblog_banner_url" value="${OPTION('jjpblog_banner_url')!}">
+							<input class="form-control input-md" type="text" name="yeezhuan_banner_url" value="${OPTION('jyeezhuan_banner_url')!}">
 						</div>
 					</div>
 					<div class="clr"></div>
@@ -103,7 +103,7 @@
 					<div class="col-sm-9  jp-set-title-line">
 						<div class="col-sm-6 jp-table-distance-top ">
 							<div class="form-group">
-								<textarea class="form-control" rows="4" name="jpblog_statistical_code">${OPTION('jpblog_statistical_code')!}</textarea>
+								<textarea class="form-control" rows="4" name="yeezhuan_statistical_code">${OPTION('yeezhuan_statistical_code')!}</textarea>
 								<p>请输入百度、CNZZ等第三方统计代码。</p>
 							</div>
 						</div>
