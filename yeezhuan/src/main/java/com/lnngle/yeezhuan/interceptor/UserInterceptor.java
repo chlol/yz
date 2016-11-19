@@ -14,7 +14,7 @@ public class UserInterceptor  implements Interceptor {
 		if (user != null) {
 			inv.invoke();
 		} else {
-			inv.getController().redirect("/yz/user/login");
+			inv.getController().redirect("/yz/user/toLogin");
 		}
 
 	}

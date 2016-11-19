@@ -1,0 +1,39 @@
+<#include "_layout.html"/>
+<@layout>
+<div class="detail">
+	<div class="am-g am-container">
+		<article class="am-article">
+			<div class="am-article-hd detail-h2">
+				<h1 class="am-article-title">${content.title!}</h1>
+				<p class="am-article-meta">${content.created?string('yyyy-MM-dd')!}</p>
+			</div>
+			<div class="am-article-bd">${content.text!}</div>
+		</article>
+
+		<form class="am-form am-g am-form-horizontal">
+			<hr data-am-widget="divider" style=""
+				class="am-divider am-divider-default" />
+			<h3>参入评论</h3>
+			<textarea class="" rows="5" placeholder="说点什么吧..."></textarea>
+
+			<div class="am-form-inline">
+			<#if
+				OPTION('comment_need_captcha') ?? && OPTION('comment_need_captcha')=='true'>
+				<div class="am-form-group">
+					<label>验证码:</label>
+				</div>
+				<div class="am-form-group">
+					<input class="am-form-field" type="text" name="comment_captcha">
+				</div>
+				<div class="am-form-group">
+					<img class="am-radius" src="${CPATH}/captcha"
+						onclick="this.src='${CPATH}/captcha?d='+Math.random();">
+				</div></#if>
+				<div class="am-form-group">
+					<button type="submit" class="am-btn am-btn-primary">发表评论</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+</@layout>
