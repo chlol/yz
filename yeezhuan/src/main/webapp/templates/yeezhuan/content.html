@@ -9,31 +9,73 @@
 			</div>
 			<div class="am-article-bd">${content.text!}</div>
 		</article>
-
-		<form class="am-form am-g am-form-horizontal">
+		<#if content.isCommentEnable() >
+		<form class="am-form am-g" action="${CPATH}/comment/submit"
+			method="post" id="comment">
+			<input type="hidden" name="cid" value="${(content.id)!}"> <input
+				type="hidden" name="anchor" value="comment"> <input
+				type="hidden" id="parent_id" name="parent_id">
 			<hr data-am-widget="divider" style=""
 				class="am-divider am-divider-default" />
 			<h3>参入评论</h3>
-			<textarea class="" rows="5" placeholder="说点什么吧..."></textarea>
+			<textarea name="text" required class="" rows="5" placeholder="说点什么吧..."></textarea>
 
-			<div class="am-form-inline">
-			<#if
-				OPTION('comment_need_captcha') ?? && OPTION('comment_need_captcha')=='true'>
+			<div class="am-form-inline" style="margin-top: 2px;">
+				<#if
+					OPTION('comment_need_captcha') ?? && OPTION('comment_need_captcha')=='true'>
 				<div class="am-form-group">
 					<label>验证码:</label>
 				</div>
 				<div class="am-form-group">
-					<input class="am-form-field" type="text" name="comment_captcha">
+					<input class="am-form-field" type="text" name="comment_captcha" required>
 				</div>
 				<div class="am-form-group">
 					<img class="am-radius" src="${CPATH}/captcha"
 						onclick="this.src='${CPATH}/captcha?d='+Math.random();">
-				</div></#if>
+				</div>
+				</#if>
 				<div class="am-form-group">
 					<button type="submit" class="am-btn am-btn-primary">发表评论</button>
 				</div>
 			</div>
 		</form>
+		</#if>
+		<@jp.commentPage pageSize="20">
+		<#if page ??>
+		<br/>
+		<div class="am-g">共${page.totalRow!}条评论</div>
+		<div class="am-g am-comment" style="border-top: 1px solid #eee">
+			<ul class="am-comments-list am-comments-list-flip">
+			<#list page.getList() as comment>
+				<li class="am-comment"><a href="#link-to-user-home"><img
+						src="${CPATH}${comment.avatar!TPATH+'/assets/images/avatar.jpg'}"
+						alt="" class="am-comment-avatar" width="48" height="48"></a>
+					<div class="am-comment-main">
+						<header class="am-comment-hd">
+							<div class="am-comment-meta">
+								<a href="#link-to-user" class="am-comment-author">${comment.author!comment.nickname!comment.username!}</a> 评论于
+								<time 
+									title="${(comment.created?string("yyyy-MM-dd"))!}">${(comment.created?string("yyyy-MM-dd"))!}</time>
+							</div>
+						</header>
+						<div class="am-comment-bd">
+							<p>${comment.text!}	</p>
+						</div>
+					</div></li>
+			</#list>	
+			</ul>
+		</div>
+		<#if (page.totalRow> 20 )>
+            <ul class="am-pagination">
+                <@pagination anchor="clist">
+                <#list pages as pi>
+                <li class="${pi.style!}"><a href="${pi.url!}">${pi.text!}</a></li>
+                </#list>
+                </@pagination>
+            </ul>
+        </#if> 
+		</#if>
+		</@jp.commentPage> 
 	</div>
 </div>
 </@layout>
