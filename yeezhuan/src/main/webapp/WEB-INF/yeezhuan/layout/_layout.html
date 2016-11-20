@@ -1,3 +1,11 @@
+<#macro script>
+</#macro> 
+<#macro script_import>
+</#macro> 
+<#macro css>
+</#macro> 
+<#macro css_import>
+</#macro>
 <#macro layout>
 <!doctype html>
 <html class="no-js fixed-layout">
@@ -15,6 +23,7 @@
   <meta name="apple-mobile-web-app-title" content="易转 | 管理平台" />
   <link rel="stylesheet" href="${CTPATH}/assets/css/amazeui.min.css"/>
   <link rel="stylesheet" href="${CTPATH}/assets/css/admin.css">
+  <@css_import />
 </head>
 <body>
 <!--[if lte IE 9]>
@@ -49,8 +58,8 @@
         <li class="admin-parent">
           <a class="am-cf" data-am-collapse="{target: '#collapse-nav1'}"><span class="am-icon-file"></span> 我的工作区 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
           <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav1">
-			<li><a href="#"><span class="am-icon-puzzle-piece"></span> 创作文章</a></li>
-            <li><a href="#"><span class="am-icon-table"></span> 文章列表</a></li>
+			<li><a href="${CPATH}/yz/a/c/edit?m=article&p=article&c=edit"><span class="am-icon-puzzle-piece"></span> 创作文章</a></li>
+            <li><a href="${CPATH}/yz/a/c/list"><span class="am-icon-table"></span> 文章列表</a></li>
           </ul>
         </li>
         <li class="admin-parent">
@@ -89,6 +98,10 @@
 <!--<![endif]-->
 <script src="${CTPATH}/assets/js/amazeui.min.js"></script>
 <script src="${CTPATH}/assets/js/app.js"></script>
+<@script_import />
+<script type="text/javascript">
+<@script />
+</script>
 </body>
 </html>
 </#macro>

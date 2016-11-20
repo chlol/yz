@@ -17,7 +17,9 @@
 		<taxonomy title="专题" name="feature" formType="select" />
 		<taxonomy title="标签" name="tag" formType="input" />
 
-		<metadata dataType="input" name="articleSource" title="文章转载地址"
+	<metadata dataType="input" name="reprintDesc" title="转载描述"
+			placeholder="输入文章转载描述" />	
+		<metadata dataType="input" name="reprintUrl" title="转载地址"
 			placeholder="输入文章转载地址" />
 	</module>
 

@@ -7,12 +7,13 @@ import io.jpress.core.JBaseController;
 import io.jpress.router.RouterMapping;
 import io.jpress.router.RouterNotAllowConvert;
 
-@RouterMapping(url = "/yz/a", viewPath = "/WEB-INF/yeezhuan")
+@RouterMapping(url = "/yz/a/c", viewPath = "/WEB-INF/yeezhuan/content")
 @RouterNotAllowConvert
 @Before(UserInterceptor.class)
-public class AdminController extends JBaseController {
-	public void index() {
-		render("index.html");
+public class ContentController extends JBaseController {
+	
+	public void edit() {
+		render("edit.html");
 		return;
 	}
 }
