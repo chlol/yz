@@ -137,10 +137,4 @@ public class UserController extends BaseFrontController {
 		setAttr(Consts.ERR_MSG_KEY, message);
 		render("user_login.html");
 	}
-
-	@Before(UserInterceptor.class)
-	public void manage() {
-		render("admin_index.html");
-		return;
-	}
 }
