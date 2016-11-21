@@ -12,10 +12,10 @@ import io.jpress.router.RouterMapping;
 public class UEditorController extends JBaseController {
 
 	public void config() {
-		String rootPath = this.getRequest().getServletContext().getRealPath( "/" );
-		String message = new ActionEnter( this.getRequest(), rootPath ).exec();
+		String rootPath = this.getRequest().getServletContext().getRealPath("/");
+		String message = new ActionEnter(this.getRequest(), rootPath).exec();
 		renderAjaxResultForSuccess(message);
-		
-		return ;
+
+		return;
 	}
 }

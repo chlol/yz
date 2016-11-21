@@ -9,7 +9,7 @@ public class UrlSkipHandler extends Handler {
 
 	@Override
 	public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
-		if (target.endsWith(".html") && target.startsWith("/static")) {
+		if ((target.endsWith(".html") || target.endsWith(".jsp")) && target.startsWith("/static")) {
 			return ;
 		} else {
 			next.handle(target, request, response, isHandled);
