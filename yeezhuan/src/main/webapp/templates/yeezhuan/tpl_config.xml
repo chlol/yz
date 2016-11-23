@@ -19,7 +19,7 @@
 
 	<metadata dataType="input" name="articleSummary" title="文章摘要"
 			placeholder="输入文章摘要内容" />	
-		<metadata dataType="input" name="originalUrl" title=""
+		<metadata dataType="input" name="originalUrl" title="原文链接"
 			placeholder="请输入原文链接，以http://开头" />
 	</module>
 

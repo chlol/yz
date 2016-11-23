@@ -1,72 +1,102 @@
 <#include "../layout/_layout.html"/>
-<#macro script_import>
-<script src="${CPATH}/static/ueditor/ueditor.config.js"></script>
-<script src="${CPATH}/static/ueditor/ueditor.all.js"></script>
-<script src="${CPATH}/static/ueditor/lang/zh-cn/zh-cn.js"></script>
-</#macro>
-<#macro script>
-var ue = UE.getEditor('editor');
+<#macro script_import> <script
+	src="${CPATH}/static/ueditor/ueditor.config.js"></script> <script
+	src="${CPATH}/static/ueditor/ueditor.all.js"></script> <script
+	src="${CPATH}/static/ueditor/lang/zh-cn/zh-cn.js"></script> </#macro>
+<#macro script> 
+var ue = UE.getEditor('content.text',{textarea:'content.text'}); 
+
+function doSave(){
+	doSubmit();
+	return false;
+}
+ 
+function doSubmit(){
+ 	$("#form").ajaxSubmit({
+			type : "post", 
+			dataType : "json", 
+			success : function(data) { 
+				if(data.errorCode == 0){
+					$("#content_id").attr("value",data.data);
+					toastr.success('保存成功！','操作成功');
+				}else{
+					toastr.error(data.message,'操作失败');
+				}
+			},
+			error : function() {
+				alert("信息提交错误");
+			}
+	});
+}
 </#macro>
 <@layout>
 <div class="admin-content-body">
-      <div class="am-cf am-padding">
-        <div class="am-fl am-cf">
+	<div class="am-cf am-padding">
+		<div class="am-fl am-cf">
 			<strong class="am-text-primary am-text-lg">撰写文章</strong>
 		</div>
-      </div>
-      <hr />
-      <div class="am-g">
-       <form>
-        <div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
-          <div class="am-panel am-panel-default">
-            <div class="am-panel-bd">
-              
-            </div>
-          </div>
+	</div>
+	<hr />
+	<div class="am-g">
+		<form id="form" method="post" action="${CPATH}/yz/a/c/save">
+		<input type="hidden" name="content.module" value="${(content.module)!m!}"> 
+		<input type="hidden" id="content_id" name="content.id" value="${(content.id)!}"> 
+		<input type="hidden" name="content.status" value="normal" id="content_status"> 
+		<input type="hidden" name="content.created" value="${(content.created)!}" > 
+		<input type="hidden" id="content_slug" name="content.slug" value="${(content.slug)!}" > 
+		<input type="hidden" name="ucode" value="${ucode}">
+			<div class="am-u-sm-12 am-u-md-4 am-u-md-push-8">
+				<section data-am-widget="accordion" style="margin-top: 0px;"
+					class="am-accordion am-accordion-gapped" data-am-accordion='{"multiple": true}'>
+					<#if module ??> <#list module.taxonomyTypes! as
+						taxonomyType> <#if taxonomyType.formType=="select">
+					<dl class="am-accordion-item am-active" style="margin-top: 0px;">
+						<dt class="am-accordion-title">${taxonomyType.title}</dt>
+						<dd class="am-accordion-bd am-collapse am-in">
+							<div class="am-accordion-content">
+								${TAXONOMY_BOX(taxonomyType,content)}</div>
+						</dd>
+					</dl>
+					<#else>
+					<dl class="am-accordion-item am-active">
+						<dt class="am-accordion-title">${taxonomyType.title}</dt>
+						<dd class="am-accordion-bd am-collapse am-in">
+							<div class="am-accordion-content">
+								<textarea name="_${taxonomyType.name}"
+									id="_${taxonomyType.name}" style="width: 100%;">
+						${(content.getTaxonomyAsString(taxonomyType.name))!}
+						</textarea>
+						<p>多个标签请用 “回车键” 或英文逗号 “,” 隔开。</p>
+							</div>
+						</dd>
+					</dl></#if> </#list> </#if>
+				</section>
+			</div>
 
-          <div class="am-panel am-panel-default">
-            <div class="am-panel-bd">
-              
-            </div>
-          </div>
-          
-          <div class="am-panel am-panel-default">
-            <div class="am-panel-bd">
-              
-            </div>
-          </div>
-          
-          <div class="am-panel am-panel-default">
-            <div class="am-panel-bd">
-              
-            </div>
-          </div>
-
-        </div>
-
-        <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
-          <div class="am-form am-form-horizontal">
-            <div class="am-form-group">
-              <div class="am-u-sm-12">
-                <input name="content.title" value="${(content.title)!}"
-								required type="text" id="title" placeholder="请输入文章标题" style="width:644px;">
-              </div>
-              <div class="am-u-sm-12">
-                <input name="content.title" value="${(originalUrl)!}"
-								required type="text" id="originalUrl" placeholder="请输入原文链接，以http://开头" style="width:644px;">
-              </div>
-            </div>
-            <div class="am-form-group">
-            	<script id="editor" type="text/plain" class="am-u-sm-12" style="height:400px;"></script>
-            </div>
-            <div class="am-form-group">
-              <div class="am-u-sm-9">
-                <button type="submit" class="am-btn am-btn-primary">保存</button>
-              </div>
-            </div>
-          </div>
-        </div>
-       </form>
-      </div>
-    </div>
+			<div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
+				<div class="am-form am-form-horizontal">
+					<div class="am-form-group">
+						<div class="am-u-sm-12">
+							<input name="content.title" value="${(content.title)!}" required
+								type="text" id="title" placeholder="请输入文章标题">
+						</div>
+						<div class="am-u-sm-12">
+							<input name="originalUrl" value="${(originalUrl)!}" required
+								type="text" id="originalUrl" placeholder="请输入原文链接，以http://开头">
+						</div>
+					</div>
+					<div class="am-form-group">
+						<script id="content.text" type="text/plain" class="am-u-sm-12"
+							style="height: 400px;">${(content.text)!}</script>
+					</div>
+					<div class="am-form-group">
+						<div class="am-u-sm-9">
+							<button name="save" onclick="doSave();" type="button" class="am-btn am-btn-primary">保存</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 </@layout>
