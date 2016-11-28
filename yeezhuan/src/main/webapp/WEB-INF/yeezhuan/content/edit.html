@@ -16,7 +16,7 @@ function doSubmit(){
 			type : "post", 
 			dataType : "json", 
 			success : function(data) { 
-				if(data.errorCode == 0){
+				if(data.errorCode == 0){alert("aa");
 					$("#content_id").attr("value",data.data);
 					toastr.success('保存成功！','操作成功');
 				}else{

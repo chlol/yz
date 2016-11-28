@@ -12,6 +12,7 @@ import java.util.Map;
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
+import com.jfinal.plugin.activerecord.Page;
 import com.lnngle.yeezhuan.interceptor.UserInterceptor;
 
 import io.jpress.core.JBaseController;
@@ -214,5 +215,25 @@ public class ContentController extends JBaseController {
 				return taxonomy.getId();
 		}
 		return null;
+	}
+	
+	public void list() {
+		String keyword = getPara("k", "").trim();
+		BigInteger[] tids = null;
+		Page<Content> page = null;
+		if (StringUtils.isNotBlank(getStatus())) {
+			page = ContentQuery.me().paginateBySearch(getPageNumber(), 2, getModuleName(), keyword,
+					getStatus(), tids, null);
+		} else {
+			page = ContentQuery.me().paginateByModuleNotInDelete(getPageNumber(), 2, getModuleName(),
+					keyword, tids, null);
+		}
+		
+		setAttr("k", keyword);
+		setAttr("page", page);
+	}
+	
+	private String getStatus() {
+		return getPara("s");
 	}
 }
