@@ -49,7 +49,7 @@
 		</tfoot>
 	</table>
 	<#if page??>
-	<div class="am-margin-left" data-am-page="{pages:${page.totalPage},curr:${page.pageNumber},jump:'${CPATH}/yz/a/c/list?page=%page%'}"></div>
+	<div class="am-margin-left" data-am-page="{pages:${page.totalPage},curr:${page.pageNumber},jump:'${CPATH}/yz/a/c/list?page=%page%&k=${(k)!}'}"></div>
 	</#if>
 </div>
 </@layout>
