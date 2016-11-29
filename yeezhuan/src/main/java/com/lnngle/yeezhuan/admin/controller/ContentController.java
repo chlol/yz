@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
@@ -80,10 +81,6 @@ public class ContentController extends JBaseController {
 
 		boolean isAddAction = content.getId() == null;
 
-		// String slug = StringUtils.isBlank(content.getSlug()) ?
-		// content.getTitle() : content.getSlug();
-		// content.setSlug(slug);
-
 		Content dbContent = ContentQuery.me().findBySlug(content.getSlug());
 		if (dbContent != null && content.getId() != null && dbContent.getId().compareTo(content.getId()) != 0) {
 			renderAjaxResultForError();
@@ -97,6 +94,8 @@ public class ContentController extends JBaseController {
 				Content oldContent = null;
 				if (content.getId() != null) {
 					oldContent = ContentQuery.me().findById(content.getId());
+				} else {
+					content.setSlug(UUID.randomUUID().toString().replace("-", ""));
 				}
 
 				if (!content.saveOrUpdate()) {
@@ -222,10 +221,10 @@ public class ContentController extends JBaseController {
 		BigInteger[] tids = null;
 		Page<Content> page = null;
 		if (StringUtils.isNotBlank(getStatus())) {
-			page = ContentQuery.me().paginateBySearch(getPageNumber(), 2, getModuleName(), keyword,
+			page = ContentQuery.me().paginateBySearch(getPageNumber(), this.getPageSize(), getModuleName(), keyword,
 					getStatus(), tids, null);
 		} else {
-			page = ContentQuery.me().paginateByModuleNotInDelete(getPageNumber(), 2, getModuleName(),
+			page = ContentQuery.me().paginateByModuleNotInDelete(getPageNumber(), this.getPageSize(), getModuleName(),
 					keyword, tids, null);
 		}
 		

@@ -1,8 +1,12 @@
 <#include "../layout/_layout.html"/>
+<#macro css_import>
+<link rel="stylesheet" href="${CPATH}/static/plugins/toastr/toastr.css">
+</#macro>
 <#macro script_import> <script
 	src="${CPATH}/static/ueditor/ueditor.config.js"></script> <script
 	src="${CPATH}/static/ueditor/ueditor.all.js"></script> <script
-	src="${CPATH}/static/ueditor/lang/zh-cn/zh-cn.js"></script> </#macro>
+	src="${CPATH}/static/ueditor/lang/zh-cn/zh-cn.js"></script><script
+	src="${CPATH}/static/plugins/toastr/toastr.js"></script> </#macro>
 <#macro script> 
 var ue = UE.getEditor('content.text',{textarea:'content.text'}); 
 
@@ -16,7 +20,7 @@ function doSubmit(){
 			type : "post", 
 			dataType : "json", 
 			success : function(data) { 
-				if(data.errorCode == 0){alert("aa");
+				if(data.errorCode == 0){
 					$("#content_id").attr("value",data.data);
 					toastr.success('保存成功！','操作成功');
 				}else{
@@ -33,7 +37,7 @@ function doSubmit(){
 <div class="admin-content-body">
 	<div class="am-cf am-padding">
 		<div class="am-fl am-cf">
-			<strong class="am-text-primary am-text-lg">撰写文章</strong>
+			<strong class="am-text-primary am-text-lg">创作文章</strong>
 		</div>
 	</div>
 	<hr />
