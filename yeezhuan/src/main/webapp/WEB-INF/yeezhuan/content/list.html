@@ -32,6 +32,7 @@
 				<th>点赞数</th>
 				<th>评论数</th>
 				<th>创建时间</th>
+				<th>操作</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,7 +42,13 @@
 				<td>${bean.view_count!}</td>
 				<td>${bean.vote_up!}</td>
 				<td>${bean.comment_count!}</td>
-				<td>${bean.created!}</td>
+				<td>${(bean.created)?string["yyyy-MM-dd"]}</td>
+				<td>
+				<div class="am-btn-group am-btn-group-xs">
+					<a href="${CPATH}/yz/a/c/edit?m=article&id=${bean.id!}" class="am-btn am-btn-primary am-radius">编辑</a>
+					<a href="${CPATH}/yz/a/c/view?m=article&id=${bean.id!}" class="am-btn am-btn-primary am-radius">预览</a>
+				</div>
+				</td>
 			</tr>
 			</#list></#if>
 		</tbody>

@@ -115,7 +115,7 @@ public class UserController extends BaseFrontController {
 			MessageKit.sendMessage(Actions.USER_CREATED, user);
 
 			if (isAjaxRequest()) {
-				renderAjaxResultForSuccess();
+				renderForRegister("用户注册成功");
 			} else {
 				String gotoUrl = getPara("goto");
 				gotoUrl = StringUtils.urlDecode(gotoUrl);
@@ -123,7 +123,7 @@ public class UserController extends BaseFrontController {
 				redirect(gotoUrl);
 			}
 		} else {
-			renderAjaxResultForError();
+			renderForRegister("用户注册失败");
 		}
 
 	}

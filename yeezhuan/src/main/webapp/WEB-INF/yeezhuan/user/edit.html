@@ -1,0 +1,48 @@
+<#include "../layout/_layout.html"/>
+<@layout>
+<div class="admin-content-body">
+	<div class="am-cf am-padding">
+		<div class="am-fl am-cf">
+			<strong class="am-text-primary am-text-lg">账号设置</strong>
+		</div>
+	</div>
+	<hr />
+	<div class="am-g">
+		<div class="am-u-sm-push-2"><label class="am-text-danger">${errorMsg!}</label></div>
+		<form id="form" method="post" action="${CPATH}/yz/a/u/edit"
+			class="am-form am-form-horizontal">
+			<input type="hidden" name="user.id" value="${(user.id)!}">
+			<div class="am-form-group">
+				<label for="f_item1" class="am-u-sm-2 am-form-label">昵称</label>
+				<div class="am-u-sm-5 am-u-sm-uncentered">
+					<input id="f_item1" name="user.nickname" value="${(user.nickname)!}" type="text" placeholder="输入你的昵称">
+				</div>
+			</div>
+			<div class="am-form-group">
+				<label for="f_item3" class="am-u-sm-2 am-form-label">密码</label>
+				<div class="am-u-sm-5 am-u-sm-uncentered">
+					<input id="f_item3" name="user.password" autocomplete="off" type="password" placeholder="输入你的密码">
+					<input type="password" style="height: 0px;width: 0px;opacity:0;">
+				</div>
+			</div>
+			<div class="am-form-group">
+				<label for="f_item4" class="am-u-sm-2 am-form-label">电子邮件</label>
+				<div class="am-u-sm-5 am-u-sm-uncentered">
+					<input id="f_item4" name="user.email" value="${(user.email)!}" type="email" placeholder="输入你的电子邮件">
+				</div>
+			</div>
+			<div class="am-form-group">
+				<label for="f_item5" class="am-u-sm-2 am-form-label">QQ</label>
+				<div class="am-u-sm-5 am-u-sm-uncentered">
+					<input id="f_item5" name="user.qq" value="${(user.qq)!}" type="number" placeholder="输入你的QQ号码">
+				</div>
+			</div>
+			<div class="am-form-group">
+				<div class="am-u-sm-push-2">
+				<button name="save" type="submit" class="am-btn am-btn-primary">保存</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+</@layout>
