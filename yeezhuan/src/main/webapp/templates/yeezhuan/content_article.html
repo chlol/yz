@@ -1,11 +1,14 @@
 <#include "_layout_no_footer.html"/>
+<#macro script_import>
+ <script src="${CPATH}/counter?cid=${content.id!}"></script>
+</#macro> 
 <#macro script>
 window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"24"},"share":{},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </#macro>
 <@layout>
 <div class="detail">
 	<div class="am-g am-container">
-		<article class="am-article">
+		<article class="am-article"><br/>
 			<div class="am-article-hd detail-h2">
 				<h1 class="am-article-title">${content.title!}</h1>
 				<p class="am-article-meta" style="text-align: center;font-size: 1.8rem;">
