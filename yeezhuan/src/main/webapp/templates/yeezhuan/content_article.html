@@ -1,4 +1,7 @@
 <#include "_layout_no_footer.html"/>
+<#macro script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"24"},"share":{},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</#macro>
 <@layout>
 <div class="detail">
 	<div class="am-g am-container">
@@ -12,14 +15,25 @@
 			</div>
 			<div class="am-article-bd">${content.text!}</div>
 		</article>
+		<br/>
+		<div id="share" class="bdsharebuttonbox">
+			<div style="border-bottom: 1px solid #eee">分享到</div>
+			<div><a href="#" class="bds_weixin" data-cmd="weixin"></a>
+			<a href="#" class="bds_qzone" data-cmd="qzone">
+			</a><a href="#" class="bds_tsina" data-cmd="tsina">
+			</a><a href="#" class="bds_tqq" data-cmd="tqq"></a>
+			<a href="#" class="bds_renren" data-cmd="renren"></a>
+			<a href="#" class="bds_more" data-cmd="more"></a>
+			</div>
+		</div>
+		<br/>
+		<div id="ad" style="border-bottom: 1px solid #eee">广告</div>
 		<#if content.isCommentEnable() >
 		<form class="am-form am-g" action="${CPATH}/comment/submit"
 			method="post" id="comment">
 			<input type="hidden" name="cid" value="${(content.id)!}"> <input
 				type="hidden" name="anchor" value="comment"> <input
 				type="hidden" id="parent_id" name="parent_id">
-			<hr data-am-widget="divider" style=""
-				class="am-divider am-divider-default" />
 			<h3>参入评论</h3>
 			<textarea name="text" required class="" rows="5" placeholder="说点什么吧..."></textarea>
 

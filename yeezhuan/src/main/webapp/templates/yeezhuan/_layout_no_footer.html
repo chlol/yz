@@ -1,3 +1,11 @@
+<#macro script>
+</#macro> 
+<#macro script_import>
+</#macro> 
+<#macro css>
+</#macro> 
+<#macro css_import>
+</#macro>
 <#macro layout>
 <!DOCTYPE html>
 <html>
@@ -12,6 +20,8 @@
   <meta http-equiv="Cache-Control" content="no-siteapp"/>
   <link rel="alternate icon" type="image/png" href="${CTPATH}/assets/i/favicon.png">
   <link rel="stylesheet" href="${CTPATH}/assets/css/amazeui.min.css"/>
+  <@css_import />
+  <@css />
 </head>
 <body>
 <header class="am-topbar am-topbar-fixed-top">
@@ -49,6 +59,10 @@
 <script src="${CTPATH}/assets/js/jquery.form.min.js"></script>
 <!--<![endif]-->
 <script src="${CTPATH}/assets/js/amazeui.min.js"></script>
+<@script_import />
+<script type="text/javascript">
+<@script />
+</script>
 </body>
 </html>
 </#macro>
