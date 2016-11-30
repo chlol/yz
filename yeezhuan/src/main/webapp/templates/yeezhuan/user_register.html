@@ -1,6 +1,17 @@
 <#include "_layout_no_footer.html"/>
+<#macro script>
+$(function() {
+    var $checkbox = $('#readAccept');
+    $checkbox.on('change', function() {
+    	if($(this).is(':checked')) {
+    		$('#submitButton').removeAttr("disabled"); 
+    	} else {
+    		$('#submitButton').attr('disabled',"true");
+    	}
+    });
+  })
+</#macro>
 <@layout>
-
 <div class="am-u-lg-3 am-u-md-6 am-u-sm-8 am-u-sm-centered">
 		<br />
 		<h1 class="am-animation-slide-top">用户注册</h1>
@@ -26,13 +37,30 @@
 			</div>
 			<br />
 			<div class="am-input-group am-checkbox">
-				<input type="checkbox" checked="true">我已阅读并接受<a href="#">《用户协议》</a>
+				<input id="readAccept" type="checkbox" checked="true">我已阅读并接受
+				<a href="#" data-am-modal="{target: '#serviceAgreement'}">《用户协议》</a>
 			</div>
-			<button type="submit"
+			<button id="submitButton" type="submit"
 			class="am-btn am-btn-primary am-btn-block am-btn-lg">注册</button>
 		</form>
 		<br />
 		<br />
 	</div>
-
+	
+	<div class="am-popup" id="serviceAgreement">
+	  <div class="am-popup-inner">
+	    <div class="am-popup-hd" style="background-color: #0e90d2;">
+	      <h4 class="am-popup-title">服务协议</h4>
+	      <span data-am-modal-close
+	            class="am-close">&times;</span>
+	    </div>
+	    <div class="am-popup-bd">
+	      待拟定......
+	      ......
+	      ......
+	      ......
+	    </div>
+	  </div>
+	</div>
+	
 </@layout>

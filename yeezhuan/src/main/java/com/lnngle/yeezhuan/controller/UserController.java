@@ -94,7 +94,7 @@ public class UserController extends BaseFrontController {
 			return;
 		}
 
-		if (null != mobile && UserQuery.me().findUserByMobile(mobile) != null) {
+		if (UserQuery.me().findUserByMobile(mobile) != null) {
 			renderForRegister(ERR_MSG13);
 			return;
 		}
@@ -115,7 +115,7 @@ public class UserController extends BaseFrontController {
 			MessageKit.sendMessage(Actions.USER_CREATED, user);
 
 			if (isAjaxRequest()) {
-				renderForRegister("用户注册成功");
+				renderForRegister("用户注册成功！");
 			} else {
 				String gotoUrl = getPara("goto");
 				gotoUrl = StringUtils.urlDecode(gotoUrl);
@@ -123,7 +123,7 @@ public class UserController extends BaseFrontController {
 				redirect(gotoUrl);
 			}
 		} else {
-			renderForRegister("用户注册失败");
+			renderForRegister("用户注册失败！");
 		}
 
 	}
@@ -136,5 +136,52 @@ public class UserController extends BaseFrontController {
 	private void renderForLogin(String message) {
 		setAttr(Consts.ERR_MSG_KEY, message);
 		render("user_login.html");
+	}
+	
+	private void renderForRetrieve(String message) {
+		setAttr(Consts.ERR_MSG_KEY, message);
+		render("retrieve_password.html");
+	}
+	
+	public void toRetrieve() {
+		render("retrieve_password.html");
+		return;
+	}
+	
+	public void retrieve() {
+		keepPara();
+
+		String mobile = getPara("mobile");
+		String password = getPara("password");
+
+		if (!StringUtils.isNotBlank(mobile)) {
+			renderForRegister(ERR_MSG11);
+			return;
+		}
+
+		if (!StringUtils.isNotBlank(password)) {
+			renderForRegister(ERR_MSG21);
+			return;
+		}
+		
+		User user = UserQuery.me().findUserByMobile(mobile);
+		if (user == null) {
+			renderForRegister("要找回密码的手机号码不存在！");
+			return;
+		}
+
+		String salt = EncryptUtils.salt();
+		password = EncryptUtils.encryptPassword(password, salt);
+		user.setPassword(password);
+		user.setSalt(salt);
+		user.setCreateSource("retrieve");
+		user.setCreated(new Date());
+
+		if (user.update()) {
+			renderForLogin("密码找回成功，请重新登录！");
+		} else {
+			renderForRetrieve("找回密码失败！");
+		}
+		
 	}
 }
