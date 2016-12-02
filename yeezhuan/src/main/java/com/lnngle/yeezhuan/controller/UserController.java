@@ -5,8 +5,14 @@ import static io.jpress.Consts.COOKIE_LOGINED_USER;
 import java.util.Date;
 
 import com.jfinal.aop.Before;
+import com.jfinal.log.Log;
 import com.lnngle.yeezhuan.Consts;
 import com.lnngle.yeezhuan.interceptor.UserInterceptor;
+import com.taobao.api.ApiException;
+import com.taobao.api.DefaultTaobaoClient;
+import com.taobao.api.TaobaoClient;
+import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
 
 import io.jpress.core.BaseFrontController;
 import io.jpress.message.Actions;
@@ -26,9 +32,23 @@ public class UserController extends BaseFrontController {
 	public static final String ERR_MSG21 = "密码不能为空!";
 	public static final String ERR_MSG22 = "密码错误!";
 
+	private static final Log log = Log.getLog(UserController.class);
+
 	public void toLogin() {
 		render("user_login.html");
 		return;
+	}
+	
+	private void setBackPara(String mobile,String password,String validateCode) {
+		this.setAttr("mobile",mobile );
+		this.setAttr("password", password);
+		this.setAttr("validateCode", validateCode);
+	}
+	
+	private void removeBackPara() {
+		this.removeAttr("mobile");
+		this.removeAttr("password");
+		this.removeAttr("validateCode");
 	}
 
 	public void login() {
@@ -36,6 +56,8 @@ public class UserController extends BaseFrontController {
 
 		String mobile = getPara("mobile");
 		String password = getPara("password");
+		
+		setBackPara(mobile,password,null);
 
 		if (!StringUtils.isNotBlank(mobile)) {
 			renderForLogin(ERR_MSG11);
@@ -83,6 +105,9 @@ public class UserController extends BaseFrontController {
 
 		String mobile = getPara("mobile");
 		String password = getPara("password");
+		String validateCode = getPara("validateCode");
+		
+		setBackPara(mobile,password,validateCode);
 
 		if (!StringUtils.isNotBlank(mobile)) {
 			renderForRegister(ERR_MSG11);
@@ -96,6 +121,19 @@ public class UserController extends BaseFrontController {
 
 		if (UserQuery.me().findUserByMobile(mobile) != null) {
 			renderForRegister(ERR_MSG13);
+			return;
+		}
+		String key = Code_Key_1 + mobile;
+		Object myCode = this.getSession().getAttribute(key);
+		if (myCode != null) {
+			String tmpCode = (String) myCode;
+			String[] split = tmpCode.split(";");
+			if (!(validateCode.equals(split[0]) && ((System.currentTimeMillis() - Long.valueOf(split[1]).longValue())) < 10*60*1000)) {
+				renderForRegister("无效的短信验证码！");
+				return;
+			}
+		} else {
+			renderForRegister("无效的短信验证码！");
 			return;
 		}
 
@@ -113,15 +151,9 @@ public class UserController extends BaseFrontController {
 		if (user.save()) {
 			CookieUtils.put(this, COOKIE_LOGINED_USER, user.getId());
 			MessageKit.sendMessage(Actions.USER_CREATED, user);
-
-			if (isAjaxRequest()) {
-				renderForRegister("用户注册成功！");
-			} else {
-				String gotoUrl = getPara("goto");
-				gotoUrl = StringUtils.urlDecode(gotoUrl);
-				gotoUrl = StringUtils.urlRedirect(gotoUrl);
-				redirect(gotoUrl);
-			}
+			
+			removeBackPara();
+			renderForLogin("用户注册成功,请登录！");
 		} else {
 			renderForRegister("用户注册失败！");
 		}
@@ -137,22 +169,23 @@ public class UserController extends BaseFrontController {
 		setAttr(Consts.ERR_MSG_KEY, message);
 		render("user_login.html");
 	}
-	
+
 	private void renderForRetrieve(String message) {
 		setAttr(Consts.ERR_MSG_KEY, message);
 		render("retrieve_password.html");
 	}
-	
+
 	public void toRetrieve() {
 		render("retrieve_password.html");
 		return;
 	}
-	
-	public void retrieve() {
-		keepPara();
 
+	public void retrieve() {
 		String mobile = getPara("mobile");
 		String password = getPara("password");
+		String validateCode = getPara("validateCode");
+		
+		setBackPara(mobile,password,validateCode);
 
 		if (!StringUtils.isNotBlank(mobile)) {
 			renderForRegister(ERR_MSG11);
@@ -163,10 +196,24 @@ public class UserController extends BaseFrontController {
 			renderForRegister(ERR_MSG21);
 			return;
 		}
-		
+
 		User user = UserQuery.me().findUserByMobile(mobile);
 		if (user == null) {
 			renderForRegister("要找回密码的手机号码不存在！");
+			return;
+		}
+		
+		String key = Code_Key_2 + mobile;
+		Object myCode = this.getSession().getAttribute(key);
+		if (myCode != null) {
+			String tmpCode = (String) myCode;
+			String[] split = tmpCode.split(";");
+			if (!(validateCode.equals(split[0]) && ((System.currentTimeMillis() - Long.valueOf(split[1]).longValue())) < 10*60*1000)) {
+				renderForRetrieve("无效的验证码！");
+				return;
+			}
+		} else {
+			renderForRetrieve("无效的验证码！");
 			return;
 		}
 
@@ -178,10 +225,65 @@ public class UserController extends BaseFrontController {
 		user.setCreated(new Date());
 
 		if (user.update()) {
+			removeBackPara();
 			renderForLogin("密码找回成功，请重新登录！");
 		} else {
 			renderForRetrieve("找回密码失败！");
 		}
+
+	}
+
+	private static final String Code_Key_Pre = "CODE_KEY_";
+	private static final String Code_Key_1 = "CODE_KEY_1";
+	private static final String Code_Key_2 = "CODE_KEY_2";
+	public void send() {
+		String mobile = getPara("mobile");
+		String code = createRandomCode();
 		
+		if (!StringUtils.isNotBlank(mobile)) {
+			this.renderAjaxResultForSuccess("获取短信验证码前请先输入手机号码！");
+			return;
+		}
+		
+		if (sendSMS(mobile, code)) {
+			String key = Code_Key_Pre + this.getPara("type") + mobile;
+			this.getSession().setAttribute(key, code + ";" + System.currentTimeMillis());
+			this.renderAjaxResultForSuccess("短信验证码发送成功,请输入验证码！");
+		} else {
+			this.renderAjaxResultForSuccess("短信验证码发送失败，请确认手机号输入是否正确！");
+		}
+	}
+
+	private static boolean sendSMS(String phone, String code) {
+		TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23554031",
+				"36c39219f51cbd44bb03fa96bcd00cab");
+		AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+		req.setSmsType("normal");
+		req.setSmsFreeSignName("易转");
+		req.setRecNum(phone);
+		req.setSmsTemplateCode("SMS_32495150");
+		req.setSmsParamString("{\"code\":\"" + code + "\"}");
+		try {
+			AlibabaAliqinFcSmsNumSendResponse rsp = client.execute(req);
+			return rsp.getResult() == null ? false : rsp.getResult().getSuccess();
+		} catch (ApiException e) {
+			log.error("发送短信验证码异常", e);
+			return false;
+		}
+	}
+	
+	public static String createRandomCode(){
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < 6; i++) {
+        	sb.append((int)(Math.random() * 9));
+        }
+        return sb.toString();
+    }
+
+
+	public static void main(String[] args) {
+		for (int i = 0; i < 50; i++) {
+			System.out.println(createRandomCode());
+		}
 	}
 }

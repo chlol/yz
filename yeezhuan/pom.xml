@@ -171,6 +171,22 @@
 			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/commons-codec-1.9.jar</systemPath>
 		</dependency>
 		<!-- for ueditor end -->
+		<!-- for aliyun -->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>taobao-sdk-java-auto_1455552377940</artifactId>
+			<version>20160607</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/taobao-sdk-java-auto_1455552377940-20160607.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/commons-logging-1.2.jar</systemPath>
+		</dependency>
+		<!-- for aliyun end -->
 	</dependencies>
 
 	<build>
