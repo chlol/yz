@@ -1,0 +1,107 @@
+<#include "../layout/_layout.html"/>
+<#macro css_import>
+<link rel="stylesheet" href="${CPATH}/static/plugins/toastr/toastr.css">
+</#macro>
+<#macro script_import> <script
+	src="${CTPATH}/assets/js/amazeui.page.js"></script> <script
+	src="${CPATH}/static/plugins/toastr/toastr.js"></script></#macro>
+<#macro script> 
+$(document).ready(function(){
+  $(".filter-selected").change(function(){
+  		var tids = "";
+  		$(".filter-selected").each(function(){
+  			if("" != $(this).val()){
+  				tids += $(this).val()+",";
+  			}
+  		});
+  		
+  		$(".tids").val(tids);
+  });
+});
+
+function doIncluded(cid) {
+	var url = "${CPATH}/yz/a/c/included?m=${m!}&cid=" + cid; 
+	$.get(url,function(data,status){
+		if(data.errorCode == 0){
+			$("#includedLink" + cid).attr("disabled",true); 
+			toastr.success(data.message,'操作成功');
+		} else {
+			toastr.error(data.message,'操作失败');
+		}
+	});
+}
+</#macro>	
+<#macro css_import>
+<link rel="stylesheet" href="${CTPATH}/assets/css/amazeui.page.css">
+</#macro>
+<@layout>
+<div class="admin-content-body">
+	<div class="am-cf am-padding">
+		<div class="am-fl am-cf">
+			<strong class="am-text-primary am-text-lg">公用文章</strong>
+		</div>
+	</div>
+	<hr />
+	<div class="am-g">
+		<#if _taxonomyMap ??>
+		<div class="am-u-sm-4">
+		<form id="filterForm" method="POST" action="${CPATH}/yz/a/c/pList?m=${m!}">
+		<#list  _taxonomyMap.keySet() as _title>
+		<select class="filter-selected">
+	        <option value="">全部${_title!}</option>
+			<#if _taxonomyMap.get(_title) ??>
+				<#list _taxonomyMap.get(_title) as taxonomy >
+					<option value="${taxonomy.id!}" ${taxonomy._selected!}>${taxonomy.layerString!}${taxonomy.title!}</option>
+				</#list> 
+			</#if>
+	    </select>
+	    </#list>
+	    <input type="hidden" name="tids" class="tids">
+	    <button id="filterButton" class="am-btn am-btn-primary am-btn-xs" type="submit">筛选</button>
+	    </form>
+		</div>
+		</#if>
+  		<div class="am-u-sm-4">
+		<form id="searchForm" method="POST" action="${CPATH}/yz/a/c/pList?m=${m!}">
+					<input name="k" type="text" value="${(k)!}" 
+						placeholder="请输入关键词" /> 
+						<button id="searchButton" class="am-btn am-btn-primary am-btn-xs" type="submit">搜索</button>
+		</div>	
+		</form>
+	</div>
+	<table class="am-table am-table-striped am-table-hover am-margin-left">
+		<thead>
+			<tr>
+				<th>标题</th>
+				<th>阅读数</th>
+				<th>点赞数</th>
+				<th>评论数</th>
+				<th>创建时间</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<#if page??> <#list page.getList() as bean>
+			<tr>
+				<td>${bean.title!}</td>
+				<td>${bean.view_count!}</td>
+				<td>${bean.vote_up!}</td>
+				<td>${bean.comment_count!}</td>
+				<td>${(bean.created)?string["yyyy-MM-dd"]}</td>
+				<td>
+				<div class="am-btn-group am-btn-group-xs">
+					<a href="#" onclick="doIncluded(${bean.id!});" id="includedLink${bean.id!}" class="am-btn am-btn-primary am-radius">收录</a>
+					<a href="${bean.url!}" target="_blank" class="am-btn am-btn-primary am-radius">预览</a>
+				</div>
+				</td>
+			</tr>
+			</#list></#if>
+		</tbody>
+		<tfoot>
+		</tfoot>
+	</table>
+	<#if page??>
+	<div class="am-margin-left" data-am-page="{pages:${page.totalPage},curr:${page.pageNumber},jump:'${CPATH}/yz/a/c/pList?m=${m!}&page=%page%&k=${(k)!}'}"></div>
+	</#if>
+</div>
+</@layout>

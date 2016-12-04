@@ -85,8 +85,12 @@ function doSubmit(){
 								type="text" id="title" placeholder="请输入文章标题">
 						</div>
 						<div class="am-u-sm-12">
+							<input name="originalName" value="${(originalName)!}" required
+								type="text" id="originalName" placeholder="如属转载，请输入原文出处，如：新浪网">
+						</div>
+						<div class="am-u-sm-12">
 							<input name="originalUrl" value="${(originalUrl)!}" required
-								type="text" id="originalUrl" placeholder="请输入原文链接，以http://开头">
+								type="text" id="originalUrl" placeholder="如属转载，请输入原文链接，以http://开头">
 						</div>
 					</div>
 					<div class="am-form-group">

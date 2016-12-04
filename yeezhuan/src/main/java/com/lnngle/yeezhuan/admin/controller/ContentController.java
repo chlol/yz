@@ -15,6 +15,8 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.lnngle.yeezhuan.interceptor.UserInterceptor;
+import com.lnngle.yeezhuan.model.UserIncluded;
+import com.lnngle.yeezhuan.model.query.ContentQuery;
 
 import io.jpress.core.JBaseController;
 import io.jpress.core.render.AjaxResult;
@@ -23,7 +25,6 @@ import io.jpress.message.MessageKit;
 import io.jpress.model.Content;
 import io.jpress.model.Taxonomy;
 import io.jpress.model.User;
-import io.jpress.model.query.ContentQuery;
 import io.jpress.model.query.MappingQuery;
 import io.jpress.model.query.TaxonomyQuery;
 import io.jpress.router.RouterMapping;
@@ -67,6 +68,11 @@ public class ContentController extends JBaseController {
 
 	public void save() {
 		final Map<String, String> metas = new HashMap<>();
+		String originalName = this.getPara("originalName");
+		if (!StringUtils.isBlank(originalName)) {
+			metas.put("originalName", originalName);
+		}
+		
 		String originalUrl = this.getPara("originalUrl");
 		if (!StringUtils.isBlank(originalUrl)) {
 			metas.put("originalUrl", originalUrl);
@@ -216,23 +222,112 @@ public class ContentController extends JBaseController {
 		return null;
 	}
 	
-	public void list() {
+	public void mList() {
 		String keyword = getPara("k", "").trim();
 		BigInteger[] tids = null;
 		Page<Content> page = null;
-		if (StringUtils.isNotBlank(getStatus())) {
-			page = ContentQuery.me().paginateBySearch(getPageNumber(), this.getPageSize(), getModuleName(), keyword,
-					getStatus(), tids, null);
-		} else {
-			page = ContentQuery.me().paginateByModuleNotInDelete(getPageNumber(), this.getPageSize(), getModuleName(),
-					keyword, tids, null);
-		}
+		page = ContentQuery.me().paginateForPublic(getPageNumber(), this.getPageSize(), getModuleName(),
+				keyword, tids, null,this.getLoginedUser().getId(),false);
 		
 		setAttr("k", keyword);
 		setAttr("page", page);
+		setAttr("m", getModuleName());
+	}
+	public void pList() {
+		list();
+	}
+	private void list() {
+		String keyword = getPara("k", "").trim();
+		setAttr("tids", getPara("tids"));
+		BigInteger[] tids = null;
+		String[] tidStrings = getPara("tids", "").split(",");
+
+		List<BigInteger> tidList = new ArrayList<BigInteger>();
+		for (String stringid : tidStrings) {
+			if (StringUtils.isNotBlank(stringid)) {
+				tidList.add(new BigInteger(stringid));
+			}
+		}
+		tids = tidList.toArray(new BigInteger[] {});
+		Page<Content> page = ContentQuery.me().paginateForPublic(getPageNumber(), this.getPageSize(), getModuleName(),
+					keyword, tids, null,this.getLoginedUser().getId(),true);
+
+		filterUI(tids);
+		setAttr("k", keyword);
+		setAttr("page", page);
+		setAttr("m", getModuleName());
 	}
 	
-	private String getStatus() {
-		return getPara("s");
+	private void filterUI(BigInteger[] tids) {
+		TplModule module = TemplateManager.me().currentTemplateModule(getModuleName());
+
+		if (module == null) {
+			return;
+		}
+
+		List<TplTaxonomyType> types = module.getTaxonomyTypes();
+		if (types != null && !types.isEmpty()) {
+			HashMap<String, List<Taxonomy>> _taxonomyMap = new HashMap<String, List<Taxonomy>>();
+
+			for (TplTaxonomyType type : types) {
+				// 排除标签类的分类删选
+				if (TplTaxonomyType.TYPE_SELECT.equals(type.getFormType())) {
+					List<Taxonomy> taxonomys = TaxonomyQuery.me().findListByModuleAndTypeAsSort(getModuleName(),
+							type.getName());
+					processSelected(tids, taxonomys);
+					_taxonomyMap.put(type.getTitle(), taxonomys);
+				}
+			}
+
+			setAttr("_taxonomyMap", _taxonomyMap);
+		}
+	}
+
+	private static final String Select_Key = "_selected";
+	private void processSelected(BigInteger[] tids, List<Taxonomy> taxonomys) {
+		if (taxonomys == null || taxonomys.isEmpty()) {
+			clearSelect(taxonomys);
+			return;
+		}
+		if (tids == null || tids.length == 0) {
+			clearSelect(taxonomys);
+			return;
+		}
+		for (Taxonomy t : taxonomys) {
+			for (BigInteger id : tids) {
+				if (t.getId().compareTo(id) == 0) {
+					t.put(Select_Key, "selected=\"selected\"");
+				}
+			}
+		}
+	}
+	
+	private void clearSelect(List<Taxonomy> taxonomys) {
+		for (Taxonomy t : taxonomys) {
+			t.remove(Select_Key);
+		}
+	}
+	
+	public void included() {
+		String contentId = this.getPara("cid");
+		UserIncluded ui = new UserIncluded();
+		ui.setContentId(new BigInteger(contentId));
+		ui.setUserId(this.getLoginedUser().getId());
+		if (ui.save()) {
+			this.renderAjaxResultForSuccess("文章收录成功！");
+		} else {
+			this.renderAjaxResultForError("文章收录失败！");
+		}
+	}
+	
+	public void unIncluded() {
+		String includedId = this.getPara("iid");
+		UserIncluded ui = new UserIncluded();
+		ui.setId(new BigInteger(includedId));
+		if (ui.delete()) {
+			this.renderAjaxResultForSuccess("删除文章收录成功！");
+		} else {
+			this.renderAjaxResultForError("删除文章收录失败！");
+		}
 	}
 }

@@ -19,8 +19,10 @@
 
 	<metadata dataType="input" name="articleSummary" title="文章摘要"
 			placeholder="输入文章摘要内容" />	
-		<metadata dataType="input" name="originalUrl" title="原文链接"
-			placeholder="请输入原文链接，以http://开头" />
+	<metadata dataType="input" name="originalName" title="原文来源于"
+			placeholder="如属转载，请输入原文出处，如：新浪网" />		
+	<metadata dataType="input" name="originalUrl" title="原文链接"
+			placeholder="如属转载，请输入原文链接，以http://开头" />
 	</module>
 
 	<module title="页面" name="page" list="所有页面" add="新建页面" comment="评论">

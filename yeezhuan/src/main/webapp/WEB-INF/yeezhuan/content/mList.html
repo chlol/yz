@@ -8,12 +8,12 @@
 <div class="admin-content-body">
 	<div class="am-cf am-padding">
 		<div class="am-fl am-cf">
-			<strong class="am-text-primary am-text-lg">文章列表</strong>
+			<strong class="am-text-primary am-text-lg">我的文章</strong>
 		</div>
 	</div>
 	<hr />
 	<div class="am-g">
-		<form id="searchForm" method="POST" action="${CPATH}/yz/a/c/list">
+		<form id="searchForm" method="POST" action="${CPATH}/yz/a/c/list?m=${m!}">
 			<div class="am-margin-left am-margin-right">
 				<div class="am-input-group am-input-group-sm" style="width: 360px">
 					<input name="k" type="text" value="${(k)!}" class="am-form-field"
@@ -45,7 +45,7 @@
 				<td>${(bean.created)?string["yyyy-MM-dd"]}</td>
 				<td>
 				<div class="am-btn-group am-btn-group-xs">
-					<a href="${CPATH}/yz/a/c/edit?m=article&id=${bean.id!}" class="am-btn am-btn-primary am-radius">编辑</a>
+					<a href="${CPATH}/yz/a/c/edit?m=${m!}&id=${bean.id!}" class="am-btn am-btn-primary am-radius">编辑</a>
 					<a href="${bean.url!}" target="_blank" class="am-btn am-btn-primary am-radius">预览</a>
 				</div>
 				</td>
@@ -56,7 +56,7 @@
 		</tfoot>
 	</table>
 	<#if page??>
-	<div class="am-margin-left" data-am-page="{pages:${page.totalPage},curr:${page.pageNumber},jump:'${CPATH}/yz/a/c/list?page=%page%&k=${(k)!}'}"></div>
+	<div class="am-margin-left" data-am-page="{pages:${page.totalPage},curr:${page.pageNumber},jump:'${CPATH}/yz/a/c/mList?m=${m!}&page=%page%&k=${(k)!}'}"></div>
 	</#if>
 </div>
 </@layout>
