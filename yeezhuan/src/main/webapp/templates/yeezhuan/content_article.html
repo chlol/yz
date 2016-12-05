@@ -30,7 +30,12 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic
 			</div>
 		</div>
 		<br/>
-		<div id="ad" style="border-bottom: 1px solid #eee">广告</div>
+		<#if signature ??>
+		<div>
+			<div id="ad" style="border-bottom: 1px solid #eee">广告</div>
+			<div>${signature}</div>
+		</div>
+		</#if>
 		<#if content.isCommentEnable() >
 		<form class="am-form am-g" action="${CPATH}/comment/submit"
 			method="post" id="comment">
