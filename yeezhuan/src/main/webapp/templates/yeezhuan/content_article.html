@@ -14,7 +14,11 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic
 				<p class="am-article-meta" style="text-align: center;font-size: 1.8rem;">
 				<i class="am-icon-clock-o"></i>${content.created?string('yyyy-MM-dd')!}&nbsp;&nbsp;
 				<i class="am-icon-eye"></i>${content.viewCount!'0'}&nbsp;&nbsp;
-				<i class="am-icon-commenting-o"></i>${content.commentCount!'0'}</p>
+				<i class="am-icon-commenting-o"></i>${content.commentCount!'0'}&nbsp;&nbsp;
+				<#if originalName ??>
+				来源：${(originalName)!}
+				</#if>
+				</p>
 			</div>
 			<div class="am-article-bd">${content.text!}</div>
 		</article>
