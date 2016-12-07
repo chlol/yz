@@ -22,6 +22,9 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic
 			</div>
 			<div class="am-article-bd">${content.text!}</div>
 		</article>
+		<#if originalUrl ??>
+		<a href="${(originalUrl)!}">查看原文></a>
+		</#if>
 		<br/>
 		<div id="share" class="bdsharebuttonbox">
 			<div style="border-bottom: 1px solid #eee">分享到</div>
