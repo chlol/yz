@@ -9,6 +9,7 @@ import io.jpress.core.cache.ActionCache;
 import io.jpress.front.controller.ContentController;
 import io.jpress.model.Content;
 import io.jpress.model.User;
+import io.jpress.model.query.OptionQuery;
 import io.jpress.model.query.UserQuery;
 import io.jpress.router.RouterMapping;
 import io.jpress.template.TemplateManager;
@@ -30,10 +31,15 @@ public class ContentOutController extends ContentController {
 	private void setUserAd() {
 		String userId = this.getPara("uid");
 		if (StringUtils.isNotEmpty(userId)) {
-			UserQuery uq = new UserQuery();
-			User user = uq.findById(new BigInteger(userId));
+			User user = UserQuery.me().findById(new BigInteger(userId));
 			String signature = user.getSignature();
 			this.setAttr("signature", signature);
+		} else {
+			String value = OptionQuery.me().findValue("default_ad");
+			if (StringUtils.isNotEmpty(value)) {
+				this.setAttr("signature", value);
+			}
+			
 		}
 	}
 	
