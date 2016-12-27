@@ -9,14 +9,14 @@
 		<form class="am-form" action="${CPATH}/yz/user/login" method="post">
 		<input type="hidden" name="goto" value="/yz/a/index">
 			<div class="am-input-group">
-				<input type="number" name="mobile" value="${mobile!}" class="am-input-group-label" placeholder="请输入已注册的手机号码" required /> <span
+				<input type="number" name="mobile" value="${mobile!}" class="am-input-group-label" placeholder="请输入已注册的手机号码" maxlength="20" required /> <span
 					class="am-input-group-label"><i
 					class="am-icon-user am-icon-sm am-icon-fw"></i></span>
 			</div>
 			<br />
 			<div class="am-input-group">
 				<input type="password" name="password" value="${password!}" class="am-input-group-label"
-					placeholder="请输入密码" minlength="6" required> <span
+					placeholder="请输入密码" minlength="6" maxlength="20" required> <span
 					class="am-input-group-label"><i
 					class="am-icon-lock am-icon-sm am-icon-fw"></i></span>
 			</div>
