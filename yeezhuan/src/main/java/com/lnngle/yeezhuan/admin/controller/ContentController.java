@@ -85,30 +85,33 @@ public class ContentController extends JBaseController {
 			return;
 		}
 
-		boolean isAddAction = content.getId() == null;
-
-		Content dbContent = ContentQuery.me().findBySlug(content.getSlug());
-		if (dbContent != null && content.getId() != null && dbContent.getId().compareTo(content.getId()) != 0) {
-			renderAjaxResultForError();
-			return;
-		}
+		final boolean isAddAction = content.getId() == null;
 
 		boolean saved = Db.tx(new IAtom() {
 			@Override
 			public boolean run() throws SQLException {
-
-				Content oldContent = null;
-				if (content.getId() != null) {
-					oldContent = ContentQuery.me().findById(content.getId());
-				} else {
+				if (StringUtils.isBlank(content.getSlug())) {
 					content.setSlug(UUID.randomUUID().toString().replace("-", ""));
 				}
-
-				if (!content.saveOrUpdate()) {
-					return false;
+				
+				Content oldContent = null;
+				if (!isAddAction) {
+					oldContent = ContentQuery.me().findById(content.getId());
+					oldContent.setText(content.getText());
+					oldContent.setModified(content.getModified());
+					oldContent.setUserId(content.getUserId());
+					oldContent.setModule(content.getModule());
+					oldContent.setStatus(content.getStatus());
+					oldContent.setCreated(content.getCreated());
+					oldContent.setSlug(content.getSlug());
+					if (!oldContent.saveOrUpdate()) {
+						return false;
+					}
+				} else {
+					if (!content.saveOrUpdate()) {
+						return false;
+					}
 				}
-
-				content.updateCommentCount();
 
 				List<BigInteger> ids = getOrCreateTaxonomyIds(content.getModule());
 				if (ids == null || ids.size() == 0) {
