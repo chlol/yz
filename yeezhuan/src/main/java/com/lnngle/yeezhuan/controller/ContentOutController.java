@@ -42,7 +42,9 @@ public class ContentOutController extends ContentController {
 			
 		}
 	}
-	
+	/**
+	 * 获取tpl_config.xml里元数据的名称及其对应的值
+	 */
 	public void setMeta() {
 		Content content = this.getAttr("content");
 		TplModule module = TemplateManager.me().currentTemplateModule(content.getModule());
