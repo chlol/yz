@@ -20,4 +20,15 @@ public class CacheCleanController extends JBaseController {
 			renderAjaxResultForSuccess("缓存不存在");
 		}
 	}
+	
+	public void clean() {
+		String cacheName = this.getPara("cacheName");
+		if (StringUtils.isNotEmpty(cacheName)) {
+			logger.info("*********开始清除缓存：" + cacheName);
+			CacheKit.removeAll(cacheName);
+			renderAjaxResultForSuccess("缓存清除完成");
+		} else {
+			renderAjaxResultForSuccess("缓存不存在");
+		}
+	}
 }
