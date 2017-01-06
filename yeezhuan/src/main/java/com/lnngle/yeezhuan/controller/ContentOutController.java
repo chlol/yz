@@ -2,6 +2,7 @@ package com.lnngle.yeezhuan.controller;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Random;
 
 import com.lnngle.yeezhuan.Consts;
 
@@ -27,25 +28,35 @@ public class ContentOutController extends ContentController {
 		setMeta();
 		
 	}
-	
+	private static final int ad_count_max = 6;
 	private void setUserAd() {
 		String userId = this.getPara("uid");
 		if (StringUtils.isNotEmpty(userId)) {
 			User user = UserQuery.me().findById(new BigInteger(userId));
 			String signature = user.getSignature();
-			this.setAttr("signature", signature);
-		} else {
-			String value = OptionQuery.me().findValue("default_ad");
-			if (StringUtils.isNotEmpty(value)) {
-				this.setAttr("signature", value);
+			if (StringUtils.isNotEmpty(signature)) {
+				this.setAttr("signature", signature);
+			} else {
+				this.setAd();
 			}
 			
+		} else {
+			this.setAd();
+		}
+	}
+	
+	private void setAd() {
+		Random r = new Random();
+		int index = r.nextInt(ad_count_max);
+		String value = OptionQuery.me().findValue("default_ad_" + index);
+		if (StringUtils.isNotEmpty(value)) {
+			this.setAttr("signature", value);
 		}
 	}
 	/**
 	 * 获取tpl_config.xml里元数据的名称及其对应的值
 	 */
-	public void setMeta() {
+	private void setMeta() {
 		Content content = this.getAttr("content");
 		TplModule module = TemplateManager.me().currentTemplateModule(content.getModule());
 		List<TplMetadata> metadatas = module.getMetadatas();
