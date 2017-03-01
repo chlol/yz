@@ -6,6 +6,8 @@
 window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic":"","bdStyle":"0","bdSize":"24"},"share":{},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </#macro>
 <@layout>
+<div class="am-g am-g-fixed">
+<div class="am-u-md-8">
 <div class="detail">
 	<div class="am-g am-container">
 		<article class="am-article"><br/>
@@ -109,5 +111,30 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdPic
 		</#if>
 		</@jp.commentPage> 
 	</div>
+</div>
+</div>
+<div class="am-u-md-4">
+ <div style="height: 100px;">&nbsp;</div>
+ <section class="am-panel am-panel-default">
+   <div class="am-panel-hd">最近文章</div>
+     <ul class="am-list blog-list">
+     <@jp.yzcontents module="article" count="6" excludeId="${content.id}"> 
+	 <#list contents as content>
+       <li><a href="${(content.url)!}">${(content.title)!}</a></li>
+      </#list>
+      </@jp.yzcontents>
+     </ul>
+  </section>
+  <section class="am-panel am-panel-default">
+   <div class="am-panel-hd">相关文章</div>
+     <ul class="am-list blog-list">
+     <@jp.yzcontents  module="article" count="10" orderBy="view_count" excludeId="${content.id}"> 
+	 <#list contents as content> 
+       <li><a href="${(content.url)!}">${(content.title)!}</a></li>
+     </#list> 
+	 </@jp.yzcontents>
+     </ul>
+  </section>
+</div>
 </div>
 </@layout>

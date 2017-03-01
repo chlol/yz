@@ -2,6 +2,7 @@ package com.lnngle.yeezhuan.model.query;
 
 import java.math.BigInteger;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.jfinal.plugin.activerecord.Page;
 
@@ -58,5 +59,44 @@ public class ContentQuery extends io.jpress.model.query.ContentQuery {
 		}
 
 		return DAO.paginate(page, pagesize, true, select, fromBuilder.toString(), params.toArray());
+	}
+	
+	public List<Content> searchContents(int page, int pagesize, String module, String keyword,String orderby,int excludeId) {
+		String select = "select c.*,GROUP_CONCAT(t.id ,':',t.slug,':',t.title,':',t.type SEPARATOR ',') as taxonomys";
+
+		StringBuilder fromBuilder = new StringBuilder(" from content c");
+		fromBuilder.append(" left join mapping m on c.id = m.`content_id`");
+		fromBuilder.append(" left join taxonomy  t on  m.`taxonomy_id` = t.id");
+		fromBuilder.append(" where c.status <> ?");
+		
+		LinkedList<Object> params = new LinkedList<Object>();
+		params.add(Content.STATUS_DELETE);
+		
+		if (excludeId > 0) {
+			fromBuilder.append(" and c.id <> ?");
+			params.add(excludeId);
+		}
+
+		boolean needWhere = false;
+		needWhere = appendIfNotEmpty(fromBuilder, "c.module", module, params, needWhere);
+
+		if (StringUtils.isNotBlank(keyword)) {
+			fromBuilder.append(" AND c.title like ? ");
+			params.add("%" + keyword + "%");
+		}
+
+		fromBuilder.append(" group by c.id");
+		if (StringUtils.isNotEmpty(orderby)) {
+			fromBuilder.append(" ORDER BY c." + orderby + " DESC");
+		} else {
+			fromBuilder.append(" ORDER BY c.created DESC");
+		}
+		
+
+		if (params.isEmpty()) {
+			return DAO.paginate(page, pagesize, true, select, fromBuilder.toString()).getList();
+		}
+
+		return DAO.paginate(page, pagesize, true, select, fromBuilder.toString(), params.toArray()).getList();
 	}
 }
