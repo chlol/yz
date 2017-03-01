@@ -1,0 +1,88 @@
+<#include "../../admin/_inc/_layout.html"/>
+<#macro script> 
+</#macro>
+<@layout active_id=p child_active_id=c>
+<section class="content-header">
+	<h1>信息列表</h1>
+</section>
+
+<!-- Main content -->
+<section class="content">
+	<div class="row content-row">
+	<form id="filterForm" method="POST" action="${CPATH}/admin/sp/list">
+		<div class="jp-left ">
+			<select style="width: 120px" class="form-control input-sm">
+			<#if allType ??>
+			<#list allType as type >
+				<option value="${type.id}">${type.name}</option>
+			</#list> 
+			</#if>
+			</select>
+		</div>
+		<div class="jp-left">
+			<button class="btn  btn-sm btn-default" type="submit">筛选</button>
+		</div>
+	</form>
+	</div>
+	<div class="box">
+		<div class="box-body jp-common-pad">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<#if fieldLabels ??>
+						<#list fieldLabels as label >
+							<th>${label}</th>
+						</#list> 
+						</#if>
+						<th>状态</th>
+						<th>申请时间</th>
+					</tr>
+				</thead>
+				<tbody>
+					<#if page??> <#list page.getList() as bean>
+					<tr class="jp-onmouse">
+						<#list fieldNames as name>
+						<#if name == "field1">
+						<td>${bean.field1}</td>
+						<#elseif name == "field2">
+						<td>${bean.field2}</td>
+						<#elseif name == "field3">
+						<td>${bean.field3}</td>
+						<#elseif name == "field4">
+						<td>${bean.field4}</td>
+						<#elseif name == "field5">
+						<td>${bean.field5}</td>
+						<#elseif name == "field6">
+						<td>${bean.field6}</td>
+						<#elseif name == "field7">
+						<td>${bean.field7}</td>
+						<#elseif name == "field8">
+						<td>${bean.field8}</td>
+						<#elseif name == "field9">
+						<td>${bean.field9}</td>
+						<#elseif name == "field10">
+						<td>${bean.field10}</td>
+						<#elseif name == "field11">
+						<td>${bean.field11}</td>
+						<#elseif name == "field2">
+						<td>${bean.field12}</td>
+						</#if>
+						</#list>
+						<td>${bean.status}</td>
+						<td>${(bean.createDate)?string["yyyy-MM-dd HH:mm:ss"]}</td>
+					</tr>
+					</#list> </#if>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="cf">
+		<div class="pull-right">
+			<#include "../../admin/_inc/_paginate_wrapper.html" />
+		</div>
+	</div>
+</section>
+</@layout>
+
+
+

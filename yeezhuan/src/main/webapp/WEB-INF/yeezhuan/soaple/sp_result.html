@@ -1,0 +1,19 @@
+<#include "../layout/_layout_soaple.html"/>
+<#macro css_import>
+<link rel="stylesheet" href="${CPATH}/static/plugins/toastr/toastr.css">
+</#macro>
+<#macro script_import> <script
+	src="${CPATH}/static/plugins/toastr/toastr.js"></script> </#macro>
+<#macro script> </#macro>
+<@layout>
+<div class="am-u-lg-3 am-u-md-6 am-u-sm-8 am-u-sm-centered">
+	<br />
+	<#if errorMsg ??>
+		<h1 class="am-animation-slide-top">${errorMsg}</h1>
+	<#else>
+		<h1 class="am-animation-slide-top">门店申请已提交，我们审核通过后将会送货到门店。</h1>
+	</#if>
+	<br />
+</div>
+
+</@layout>

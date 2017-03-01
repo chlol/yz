@@ -1,0 +1,43 @@
+<#include "../layout/_layout_soaple.html"/>
+<#macro css_import>
+<link rel="stylesheet" href="${CPATH}/static/plugins/toastr/toastr.css">
+</#macro>
+<#macro script_import> <script
+	src="${CPATH}/static/plugins/toastr/toastr.js"></script> </#macro>
+<#macro script>
+// 对浏览器的UserAgent进行正则匹配，不含有微信独有标识的则为其他浏览器
+    var useragent = navigator.userAgent;
+    if (useragent.match(/MicroMessenger/i) != 'MicroMessenger') {
+        // 这里警告框会阻塞当前页面继续加载
+        alert('已禁止本次访问：您必须使用微信内置浏览器访问本页面！');
+        // 以下代码是用javascript强行关闭当前页面
+        var opened = window.open('about:blank', '_self');
+        opened.opener = null;
+        opened.close();
+    }
+</#macro>
+<@layout>
+<div class="am-u-lg-3 am-u-md-6 am-u-sm-8 am-u-sm-centered">
+	<br />
+	<h1 class="am-animation-slide-top">门店申请</h1>
+	<br />
+	<form id="form" class="am-form" action="${CPATH}/yz/sp/store/save"
+		method="post">
+		<input name="typeId" value="${typeId}" type="hidden">
+		<#if fields ??>
+			<#list fields as field >
+			<div class="am-input-group am-btn-block">
+			<input id="${field.key}" type="text" name="${field.key}" 
+				class="am-input-group-label" placeholder="请输入${field.value}"
+				maxlength="100" />
+			</div>
+			<br />
+			</#list> 
+		</#if>
+		
+		<button id="submitButton" type="submit"
+			class="am-btn am-btn-primary am-btn-block">提交申请</button>
+	</form>
+</div>
+
+</@layout>
